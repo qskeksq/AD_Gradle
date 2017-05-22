@@ -1,0 +1,52 @@
+apply plugin: 'com.android.application' //라이브러리 개발의 경우 applicatino 이 아닌 library로 쓴다.
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.3"  //그래들 버전
+    defaultConfig {
+        applicationId "com.nadan.android.gradle"
+        minSdkVersion 15  //최소 sdk
+        targetSdkVersion 25  //최적화시킨 os 버전
+        versionCode 1  //내 앱이 업그래이드 될 때, 반드시 자연수여야 함.
+        versionName "1.0" //베타 버전은 0.9부터 시작한다.
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs { //배포용에는 반드시 키가 있어야 한다.
+        release { //여기서 실수
+            storeFile file("C:/Workspace_android/keystore/keystore.jks")
+            storePassword "tmdfl0530" //storePw
+            keyAlias "testKey" //keyId
+            keyPassword "tmdfl0530" //keyPw 로 해주고 gitIgnore에 gradle.properties를 넣어주면 git에 올라가지 않는다.
+        }
+    }
+
+    buildTypes { //앱을 어떤 타입으로 만들 것인지
+        debug{  //디버그용으로 만들겠다
+            buildConfigField "String", "MYURL", "\"test.seoul.go.kr\""
+            //빌드 컨피그에 저장된다. 사용하는 값의 타입, 이름(변수명), 실제 값으로 저장됨.
+        }
+        release { //배포용으로 만들겠다
+            signingConfig signingConfigs.release
+            buildConfigField "String", "MYURL", "\"seoul.go.kr\""
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+
+    }
+
+//    productFlavors{   //빌드타입2개 X 3가지 타입 = 6개의 앱이 생긴다.
+//        skt {   }  uplus {    } kt{    }
+//    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'junit:junit:4.12'
+}
