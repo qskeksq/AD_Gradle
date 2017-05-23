@@ -27,7 +27,7 @@ android {
             //빌드 컨피그에 저장된다. 사용하는 값의 타입, 이름(변수명), 실제 값으로 저장됨.
         }
         release { //배포용으로 만들겠다
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.release //배포용으로 만들기
             buildConfigField "String", "MYURL", "\"seoul.go.kr\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
